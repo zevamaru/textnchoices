@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Texts N' Choices</title>
+		<link rel="stylesheet" href="app/css/editor.css" />
+	</head>
+	<body>
+		<div id="app">
+			<nav id="nav">
+				<ul>
+					<li onclick="app.newText();">New Text</li>
+					<li id="btnAddChoice" class="separator disabled">Add Choice</li>
+					<li class="separator"><a href="/play.html">Play</a></li>
+					<li onclick="app.load();">Import</li>
+					<li class="separator" onclick="app.export();">Export</li>
+					<li class="separator" onclick="app.save();">Save draft</li>
+				</ul>
+			</nav>
+			<div id="canvas">
+				<div id="grid"></div>
+			</div>
+		</div>
+		<script src="app/js/editor.js"></script>
+	</body>
+</html>

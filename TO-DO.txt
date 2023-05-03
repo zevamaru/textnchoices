@@ -1,0 +1,6 @@
+- Agregar opción
+- Ventana edición de texto
+- Ventana conexión con texto
+- Exportar
+- Importar
+- Jugar

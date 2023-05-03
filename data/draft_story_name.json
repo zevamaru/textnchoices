@@ -1,0 +1,62 @@
+{
+	"name": "Story Name",
+	"author": "Author",
+	"grid": [
+		{
+			"id": "test_123",
+			"x": "20px",
+			"y": "20px",
+			"text-id": "start"
+		},
+		{
+			"id": "test_456",
+			"x": "220px",
+			"y": "220px",
+			"text-id": "start"
+		}
+	],
+	"texts": [
+		{
+			"id": "start",
+			"content": "<p>&#8220;Greetings, Ricardo. Your determination is admirable... I've been waiting your you.&#8221;</p>",
+			"choices": [
+				{
+					"content": "Who are you? Who do you know my name?",
+					"link-to": "id-1"
+				},
+				{
+					"content": "I've come to end the suffering of this town",
+					"link-to": "id-2"
+				}
+			]
+		},
+		{
+			"id": "id-1",
+			"content": "<p>&#8220;I'm just another servant of the Supreme Intelligence. I've been observing you all this time, because it's my job to watch.&#8221;</p><p>&#8220;But the fundamental question is... What motivated you to overcome all the challenges, and come this far Ricardo?&#8221;</p>",
+			"choices": [
+				{
+					"content": "To revenge Charlyn",
+					"link-to": "id-3"
+				},
+				{
+					"content": "I've come to end the suffering of this town",
+					"link-to": "id-2"
+				}
+			]
+		},
+		{
+			"id": "id-2",
+			"content": "<p>&#8220;I see... Another hero...&#8221;</p><p>&#8220;You've killed X creatures, X of them were defenseless or innocents.&#8221;</p><p>&#8220;You've also murdered X humans. You've thief X items.&#8221;</p><p>&#8220;You've lie X times, and you've destroyed X trees.&#8221;</p><p>&#8220;And as if that weren't enough, you've extinguish X species.&#8221;</p>&#8220;It seems to me that you've created A LOT of suffering, Ricardo.&#8221;</p>",
+			"choices": [
+				{
+					"content": "What? No! People told me that this tower was evil",
+					"link-to": "id-5"
+				},
+				{
+					"content": "I did what I have to do",
+					"link-to": "id-6"
+				}
+			]
+		}
+	]
+}
