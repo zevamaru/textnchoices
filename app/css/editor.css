@@ -8,6 +8,7 @@
 	font: inherit;
 	vertical-align: baseline;
 	user-select: none;
+	box-sizing: border-box;
 }
 html,
 body {
@@ -94,11 +95,14 @@ li.separator {
 	border: 1px solid rgba(0, 0, 255, 0.5);
 	z-index: 2;
 }
+#grid .choice.selected {
+	outline: 1px solid rgba(255, 255, 255, 0.5);
+	z-index: 2;
+}
 .editable:hover {
 	outline: 1px solid rgba(255, 255, 255, 0.3);
 	cursor: pointer;
 }
-
 .box {
 	position: absolute;
 	width: 100px;
@@ -106,8 +110,63 @@ li.separator {
 	background-color: black;
 	cursor: move;
 }
-
 .disabled {
     opacity: 0.4;
     pointer-events: none;
+}
+.editor {
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(3px);
+	position: absolute;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+}
+.editor .container {
+	width: 90%;
+	margin: auto;
+}
+input, textarea {
+	font-family: 'Anonymous Pro', monospace;
+	background-color: rgb(50, 50, 50);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.2);
+	padding: 24px;
+	color: white;
+	resize: none;
+	font-size: 18px;
+	border-radius: 8px;
+	min-width: 100%;
+	margin-bottom: 20px;
+}
+input::placeholder {
+	color: rgba(255, 255, 255, 0.7);
+}
+textarea{
+	height: 55vh;
+}
+input:focus, textarea:focus {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	outline: none;
+}
+.save {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	background-color: black;
+}
+input[type="button"] {
+	font-size: 20px;
+	cursor: pointer;
+	padding: 18px;
+}
+input[type="button"].cancel {
+	padding: 14px;
+}
+input[type="button"]:hover {
+	border: 1px solid rgba(255, 255, 255, 0.8);
+	cursor: pointer;
+}
+.hide {
+	display: none;
 }

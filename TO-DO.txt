@@ -1,6 +1,7 @@
-- Agregar opción
 - Ventana edición de texto
-- Ventana conexión con texto
+- Ventana edición de opción
+- Conectar con flechas
+- Lista de sugerencias de conexión de opción con texto
 - Exportar
 - Importar
 - Jugar

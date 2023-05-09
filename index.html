@@ -11,16 +11,33 @@
 		<div id="app">
 			<nav id="nav">
 				<ul>
-					<li onclick="app.newText();">New Text</li>
-					<li id="btnAddChoice" class="separator disabled">Add Choice</li>
+					<li onclick="app.newText()">New Text</li>
+					<li id="btnAddChoice" class="separator disabled" onclick="app.addChoice()">Add Choice</li>
 					<li class="separator"><a href="/play.html">Play</a></li>
-					<li onclick="app.load();">Import</li>
-					<li class="separator" onclick="app.export();">Export</li>
-					<li class="separator" onclick="app.save();">Save draft</li>
+					<li onclick="app.load()">Import</li>
+					<li class="separator" onclick="app.export()">Export</li>
+					<li class="separator" onclick="app.save()">Save draft</li>
 				</ul>
 			</nav>
 			<div id="canvas">
 				<div id="grid"></div>
+			</div>
+			<div id="choice_editor" class="editor hide">
+				<div class="container">
+					<input id="choice_editor_id" class="input" type="hidden" name="id" value="text_1234_choice_1">
+					<input id="choice_editor_choice" class="input" type="text" name="choice" placeholder="Put your text choice here..." value="">
+					<input id="choice_editor_link_to" class="input" type="text" name="link-to" placeholder="Connect to..." value="">
+					<input type="button" class="save" name="save" value="Save" onclick="app.saveChoice()">
+					<input type="button" class="cancel" name="cancel" value="Cancel" onclick="app.cancel()">
+				</div>
+			</div>
+			<div id="text_editor" class="editor hide">
+				<div class="container">
+					<input id="text_editor_id" class="input" type="text" name="id" placeholder="ID" value="text_1234">
+					<textarea id="text_editor_text" name="text" placeholder="Put your text here..."></textarea>
+					<input type="button" class="save" name="save" value="Save" onclick="app.saveText()">
+					<input type="button" class="cancel" name="cancel" value="Cancel" onclick="app.cancel()">
+				</div>
 			</div>
 		</div>
 		<script src="app/js/editor.js"></script>

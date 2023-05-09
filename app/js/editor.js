@@ -6,15 +6,19 @@ class TextsNChoices {
 		this.scroll = { top: 0, left: 0 };
 		this.click = { x: 0, y: 0, bbox: null };
 		this.target = false;
+		this.data = null;
 		this.debug();
 		this.load();
 	}
 
 	select(el) {
+		if (el.id === "btnAddChoice") {
+			return;
+		}
 		if (el && this.target != el) {
 			this.unselect(this.target);
 			this.target = el;
-			if (el.classList.contains('item')) {
+			if (el.classList.contains('item') || el.classList.contains('choice')) {
 				el.classList.add('selected');
 				let btnAddChoice = document.querySelector('#btnAddChoice');
 				btnAddChoice.classList.remove('disabled');
@@ -26,7 +30,7 @@ class TextsNChoices {
 	unselect(el) {
 		if (el) {
 			this.target = false;
-			if (el.classList.contains('item')) {
+			if (el.classList.contains('item') || el.classList.contains('choice')) {
 				el.classList.remove('selected');
 				let btnAddChoice = document.querySelector('#btnAddChoice');
 				btnAddChoice.classList.add('disabled');
@@ -83,8 +87,23 @@ class TextsNChoices {
 		return id;
 	}
 
+	getChoiceID() {
+		return { id: 1, number: 1 };
+	}
+
 	newText() {
 		this.renderItem({ id: this.uniqueID(), x: '500px', y: '300px' });
+	}
+
+	addChoice() {
+		if (this.target.classList.contains('item')) {
+			let target = this.target;
+			let id = this.getChoiceID();
+			let option = `<li id="${id.id}" data-link-to="" class="editable choice">Choice ID: ${id.number}</li>`;
+			let el = this.target.querySelector('.options');
+			el.innerHTML += option;
+			this.target = target;
+		}
 	}
 
 	load() {
@@ -99,56 +118,93 @@ class TextsNChoices {
 		let model = {
 			name: 'Story Name',
 			author: 'Author',
-			grid: [],
-			texts: [],
+			editor: [],
+			player: [],
 		};
 
-		let items = this.grid.getElementsByClassName('item');
-		let grid = [];
-		for (let i = 0; i < items.length; i++) {
-			let item = {
-				id: items[i].getAttribute('id'),
-				x: items[i].style.left,
-				y: items[i].style.top,
+		// Generate editor data
+		let els = this.grid.getElementsByClassName('item');
+		let grid = [];		
+		for (let i = 0; i < els.length; i++) {
+			let grid_item = {
+				id: els[i].getAttribute('id'),
+				x: els[i].style.left,
+				y: els[i].style.top,
 			};
-			grid.push(item);
+			grid.push(grid_item);
 		}
+		model.editor = grid;
 
-		model.grid = grid;
+		model.player = this.data.texts;
 		const data = JSON.stringify(model);
 		localStorage.setItem('TextNChoices', data);
 	}
 
+	saveChoice() {
+		console.log('save choice');
+		// obtener datos
+		// guardar datos en variable this.data
+		// actualizar html
+	}
+
+	saveText() {
+		// obtener datos
+		let id = document.querySelector('#text_editor_id');
+		let  text = document.querySelector('#text_editor_text');
+		let data = this.data.texts.find(text => t.id === id.value);
+		if (data) {
+			// modifico
+			console.log('>>>> modificar');
+		} else {
+			data = {
+				"id": id.value,
+				"content": text.value,
+			}
+		}
+		// guardar datos en variable this.data
+		console.log(this.data.texts);
+		// console.log(id.value);
+		// console.log(text.value);
+		// actualizar html
+
+	}
+
+	cancel() {
+		let textEditor = document.getElementById('text_editor');
+		let choiceEditor = document.getElementById('choice_editor');
+		textEditor.classList.add('hide');
+		choiceEditor.classList.add('hide');
+	}
+
 	remove() {
-		if (this.target) {
+		if (this.target.classList.contains('item') || this.target.classList.contains('choice')) {
 			this.target.remove();
+			this.unselect(this.target);
 		}
 	}
 
-	renderItem(itemData) {
+	item(itemData) {
 		let item = `
-        <div id="${itemData.id}" class="item" style="top: ${itemData.y}; left: ${itemData.x};">
+        <div id="${itemData.id}" data-content="" class="item" style="top: ${itemData.y}; left: ${itemData.x};">
           ID: ${itemData.id}
           <p class="text editable">Click here to edit your text.</p>
+          <ul class="options">
+          </ul>
         </div>
         `;
+		return item;
+	}
+
+	renderItem(itemData) {
+		let item = this.item(itemData);
 		this.grid.innerHTML += item;
 	}
 
 	renderData(data) {
 		let items = ``;
 		for (var i = 0; i < data.length; i++) {
-			let item = data[i];
-			items += `
-        <div id="${item.id}" class="item" style="top: ${item.y}; left: ${item.x};">
-          ID: ${item.id}
-          <p class="text editable">Esto es un ejemplo de un texto en d...</p>
-          <ul class="options">
-            <li class="editable">Text option number...</li>
-            <li class="editable">Text option number...</li>
-          </ul>
-        </div>
-        `;
+			let itemData = data[i];
+			items += this.item(itemData);
 		}
 		this.grid.innerHTML = items;
 	}

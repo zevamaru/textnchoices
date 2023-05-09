@@ -1,7 +1,7 @@
 {
 	"name": "Story Name",
 	"author": "Author",
-	"grid": [
+	"editor": [
 		{
 			"id": "test_123",
 			"x": "20px",
@@ -15,7 +15,7 @@
 			"text-id": "start"
 		}
 	],
-	"texts": [
+	"player": [
 		{
 			"id": "start",
 			"content": "<p>&#8220;Greetings, Ricardo. Your determination is admirable... I've been waiting your you.&#8221;</p>",
