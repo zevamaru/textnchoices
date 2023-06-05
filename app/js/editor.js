@@ -6,7 +6,12 @@ class TextsNChoices {
 		this.scroll = { top: 0, left: 0 };
 		this.click = { x: 0, y: 0, bbox: null };
 		this.target = false;
-		this.data = null;
+		this.data = {
+			name: 'Story Name',
+			author: 'Author',
+			editor: [],
+			player: [],
+		};
 		this.debug();
 		this.load();
 	}
@@ -92,7 +97,7 @@ class TextsNChoices {
 	}
 
 	newText() {
-		this.renderItem({ id: this.uniqueID(), x: '500px', y: '300px' });
+		this.renderItem({ id: this.uniqueID(), x: '500px', y: '300px', description: 'Click here to edit your text.' });
 	}
 
 	addChoice() {
@@ -107,21 +112,17 @@ class TextsNChoices {
 	}
 
 	load() {
+		console.log('>>>> Load')
 		let data = localStorage.getItem('TextNChoices');
 		if (data) {
 			this.data = JSON.parse(data);
-			this.renderData(this.data.grid);
+			this.renderData(this.data.editor);
 		}
+		console.log(data)
 	}
 
 	save() {
-		let model = {
-			name: 'Story Name',
-			author: 'Author',
-			editor: [],
-			player: [],
-		};
-
+		console.log('>>>> Save')
 		// Generate editor data
 		let els = this.grid.getElementsByClassName('item');
 		let grid = [];		
@@ -130,14 +131,14 @@ class TextsNChoices {
 				id: els[i].getAttribute('id'),
 				x: els[i].style.left,
 				y: els[i].style.top,
+				description: els[i].getElementsByClassName('text')[0].innerHTML,
 			};
 			grid.push(grid_item);
 		}
-		model.editor = grid;
-
-		model.player = this.data.texts;
-		const data = JSON.stringify(model);
+		this.data.editor = grid;
+		const data = JSON.stringify(this.data);
 		localStorage.setItem('TextNChoices', data);
+		console.log(data);
 	}
 
 	saveChoice() {
@@ -147,26 +148,59 @@ class TextsNChoices {
 		// actualizar html
 	}
 
-	saveText() {
-		// obtener datos
-		let id = document.querySelector('#text_editor_id');
-		let  text = document.querySelector('#text_editor_text');
-		let data = this.data.texts.find(text => t.id === id.value);
-		if (data) {
-			// modifico
-			console.log('>>>> modificar');
-		} else {
-			data = {
-				"id": id.value,
-				"content": text.value,
+	openText(id) {
+		console.log(">>>> Open text");
+		let text = this.data.player.find(text => text.id === id);
+		if (!text){
+			text = {
+				"id": id,
+				"content": '',
 			}
 		}
-		// guardar datos en variable this.data
-		console.log(this.data.texts);
-		// console.log(id.value);
-		// console.log(text.value);
-		// actualizar html
+		$inputTextCurrentId.value = text.id;
+		$inputTextId.value = text.id;
+		$inputText.value = text.content;
+		$textForm.classList.remove('hide');
+	}
 
+	saveText() {
+		let text = this.data.player.find(text => text.id === $inputTextCurrentId.value);
+		let item = this.data.editor.find(item => item.id === $inputTextCurrentId.value);
+		let el = document.getElementById($inputTextCurrentId.value);
+		const formData = {
+			"id": $inputTextId.value,
+			"content": $inputText.value,
+		}
+		if (text) {
+			console.log('>>>> Modify');
+			let index = this.data.player.indexOf(text);
+			this.data.player[index] = formData;
+		} else {
+			console.log('>>>> Create');
+			this.data.player.push(formData);
+		}
+		let description = false;
+		if (formData.content){
+			description = '"' + formData.content.slice(0, 28) + '..."';
+		}
+		el.remove();
+		this.renderItem({
+			id: formData.id,
+			x: item.x,
+			y: item.y,
+			description: description || item.description
+		});
+		$textForm.classList.add('hide');
+		this.save();
+	}
+
+	removeText(id){
+		const text = this.data.player.find(text => text.id === id);
+		let index = this.data.player.indexOf(text);
+		this.data.player.splice(index, 1);
+		let item = this.grid.querySelector('#' + id);
+		item.remove();
+		this.save();
 	}
 
 	cancel() {
@@ -177,7 +211,8 @@ class TextsNChoices {
 	}
 
 	remove() {
-		if (this.target.classList.contains('item') || this.target.classList.contains('choice')) {
+		if (this.target.classList.contains('item')) {
+			this.removeText(this.target.id);
 			this.target.remove();
 			this.unselect(this.target);
 		}
@@ -185,9 +220,9 @@ class TextsNChoices {
 
 	item(itemData) {
 		let item = `
-        <div id="${itemData.id}" data-content="" class="item" style="top: ${itemData.y}; left: ${itemData.x};">
+        <div id="${itemData.id}" class="item" style="top: ${itemData.y}; left: ${itemData.x};">
           ID: ${itemData.id}
-          <p class="text editable">Click here to edit your text.</p>
+          <p class="text editable" onClick="app.openText('${itemData.id}')">${itemData.description}</p>
           <ul class="options">
           </ul>
         </div>
@@ -254,3 +289,8 @@ class EventHandler {
 }
 
 const app = new TextsNChoices();
+
+const $textForm = document.querySelector('#text_editor');
+const $inputTextCurrentId = document.querySelector('#text_editor_current_id');
+const $inputTextId = document.querySelector('#text_editor_id');
+const $inputText = document.querySelector('#text_editor_text');
